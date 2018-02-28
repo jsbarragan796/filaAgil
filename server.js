@@ -45,7 +45,8 @@ function getSomeThing () {
 }
 
 app.use(express.static("public"));
-app.get("/index", (req, res) => {
+app.get("/", (req, res) => {
+  console.log("inicio");
   getSomeThing();
 });
 
