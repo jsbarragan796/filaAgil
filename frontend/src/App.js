@@ -23,7 +23,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={this.state.images.filter(img => img.name === "logo").map(img => img.url)[0]} alt="logo" />
+          <img className="App-logo" src=
+            {this.state.images.filter(img => img.name === "logo").map(img => img.url)[0]} alt="logo" />
           <h1 className="App-title">Welcome to Fila Agil</h1>
         </header>
         <p className="App-intro">
