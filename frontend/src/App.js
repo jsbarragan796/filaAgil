@@ -9,7 +9,7 @@ class App extends Component {
     };
   }
   componentDidMount () {
-    fetch("http://localhost:5000/api/images")
+    fetch("api/images")
       .then((res) => {
         return res.json();
       })
