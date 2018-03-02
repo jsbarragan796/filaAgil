@@ -1,12 +1,26 @@
 {
-  "name": "fila_agil",
+  "name": "fila-agil",
   "version": "1.0.0",
-  "description": "fast ordering at restaurants",
-  "main": "server.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node ./bin/www",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "mongodb": "^3.0.3",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  },
+  "engines": {
+    "node": "9.6.1"
+  },
+  "description": "fast ordering at restaurants",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jsbarragan796/filaAgil.git"
@@ -16,16 +30,5 @@
   "bugs": {
     "url": "https://github.com/jsbarragan796/filaAgil/issues"
   },
-  "homepage": "https://github.com/jsbarragan796/filaAgil#readme",
-  "dependencies": {
-    "dotenv": "^5.0.1",
-    "express": "^4.16.2",
-    "mongodb": "^3.0.3"
-  },
-  "devDependencies": {
-    "nodemon": "^1.17.1"
-  },
-  "engines": {
-    "node": "9.6.1"
-  }
+  "homepage": "https://github.com/jsbarragan796/filaAgil#readme"
 }
