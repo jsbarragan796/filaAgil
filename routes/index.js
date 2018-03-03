@@ -82,14 +82,10 @@ router.get("/images", (req, res) => {
   getPhotos((pagePhotos) => res.send(pagePhotos));
 });
 
-<<<<<<< HEAD
 // GET ingredientes de Mongo
 router.get("/ingredientes", (req, res) => {
   console.log("se van a entregar ingredientes");
   getIngredients((datos)=>res.send(datos));
 });
-=======
-
->>>>>>> origin/master
 
 module.exports = router;
