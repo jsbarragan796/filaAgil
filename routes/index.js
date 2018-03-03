@@ -8,22 +8,25 @@ var router = new express.Router();
 // Connection URL
 const url = process.env.MLAB;
 
-function findUsuario (query,db, callback) {
+/*encuentra un usuario segun las credenciales*/
+function findUsuario(query, db, callback) {
   const collection = db.collection("clientes_restaurantes");
-  collection.find(query).toArray((err, docs) => {
+  collection.findOne(query, (err, docs) => {
     assert.equal(err, null);
-    console.log("Found" + docs.length + "urls");
+    console.log("Found " + JSON.stringify(docs) + " urls");
+    if (docs === null) docs = { error: "credenciales incorrectas" };
     callback(docs);
   });
 }
 
-function getUsuario (query,callback) {
-  MongoClient.connect(url, (err, client) => {
+/* Permite encontrar a un usuario en la base de datos*/
+function getUsuario(query, callback) {
+  MongoClient.connect(url, (err, client) => { // conexion a la base de datos
     assert.equal(err, null);
     console.log("Connected");
-    const db = client.db("filas_agiles");
-    findUsuario(query,db, callback);
-    client.close();
+    const db = client.db("filas_agiles"); //se pide la collecion de los usuarios
+    findUsuario(query, db, callback); //se busca al usuario en la base de datos
+    client.close(); //se cierra collecion
   });
 }
 
@@ -31,13 +34,15 @@ function getUsuario (query,callback) {
 router.get("/usuario", (req, res) => {
   console.log(req.query.correo);
   getUsuario(
-    { correo: req.query.correo,
-      pass:req.query.pass},
+    {
+      correo: req.query.correo,
+      pass: req.query.pass
+    },
     (usuario) => res.send(usuario)
   );
 });
 
-function find (db, callback) {
+function find(db, callback) {
   const collection = db.collection("page_photos");
   collection.find({}).toArray((err, docs) => {
     assert.equal(err, null);
@@ -85,7 +90,7 @@ router.get("/images", (req, res) => {
 // GET ingredientes de Mongo
 router.get("/ingredientes", (req, res) => {
   console.log("se van a entregar ingredientes");
-  getIngredients((datos)=>res.send(datos));
+  getIngredients((datos) => res.send(datos));
 });
 
 module.exports = router;
