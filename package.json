@@ -7,7 +7,7 @@
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "dependencies": {
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.2",
     "bootstrap": "^4.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
