@@ -12,10 +12,10 @@ const url = process.env.MLAB;
 function findUsuario(query, db, callback) {
   const collection = db.collection("clientes_restaurantes");
   collection.findOne(query, (err, docs) => {
-    assert.equal(err, null);
+    assert.equal(err, null); //se revisan que no se den errores.
     console.log("Found " + JSON.stringify(docs) + " urls");
-    if (docs === null) docs = { error: "credenciales incorrectas" };
-    callback(docs);
+    if (docs === null) docs = { error: "credenciales incorrectas" }; //sino se encuentra el usuario, se responde con un error
+    callback(docs); //se responde con el usuario
   });
 }
 
@@ -32,10 +32,9 @@ function getUsuario(query, callback) {
 
 /* GET home page. */
 router.get("/usuario", (req, res) => {
-  console.log(req.query.correo);
   getUsuario(
     {
-      correo: req.query.correo,
+      correo: req.query.correo,     //crea el query segun los datos que llegan en el req
       pass: req.query.pass
     },
     (usuario) => res.send(usuario)
@@ -81,6 +80,27 @@ function getIngredients(callback) {
     });
 }
 
+function insertUsuario(query, responder) {
+  const correo = { correo: query.correo };
+
+  getUsuario(correo, (resultado) => {
+    if (typeof resultado.error !== "undefined") {
+      MongoClient.connect(url)
+        .then((client) => {
+          const db = client.db("filas_agiles"); //pide la base de datos
+          const collection = db.collection("clientes_restaurantes"); //pide la collecion
+          collection.insertOne(query)
+            .then( (data) => responder({datos:data,mensaje:"agregado exitoso!"}))
+            .catch((error) => console.log("se recibio de error:\n" + error.message));
+        })
+        .catch((error) => console.log("se recibio de error:\n" + error.message));
+    } else {
+      const siExiste = { error: "ya existe este usuario" };
+      responder(siExiste);
+    }
+  });
+}
+
 /* GET home page. */
 router.get("/images", (req, res) => {
   console.log("inicio");
@@ -91,6 +111,10 @@ router.get("/images", (req, res) => {
 router.get("/ingredientes", (req, res) => {
   console.log("se van a entregar ingredientes");
   getIngredients((datos) => res.send(datos));
+});
+
+router.post("/usuario", (req, res) => {
+  insertUsuario(req.body, (mensaje) => res.send(mensaje));
 });
 
 module.exports = router;
