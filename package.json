@@ -7,14 +7,18 @@
     "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "dependencies": {
-    "dotenv": "^5.0.1",
     "body-parser": "~1.18.2",
+    "bootstrap": "^4.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^5.0.1",
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "mongodb": "^3.0.3",
     "morgan": "~1.9.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "reactstrap": "^5.0.0-beta.2",
     "serve-favicon": "~2.4.5"
   },
   "engines": {
