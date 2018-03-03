@@ -8,9 +8,6 @@ var router = new express.Router();
 // Connection URL
 const url = process.env.MLAB;
 
-<<<<<<< HEAD
-function find(db, callback) {
-=======
 function findUsuario (query,db, callback) {
   const collection = db.collection("clientes_restaurantes");
   collection.find(query).toArray((err, docs) => {
@@ -40,10 +37,7 @@ router.get("/usuario", (req, res) => {
   );
 });
 
-//?correo=ca@unil.om&pass=1234
-
 function find (db, callback) {
->>>>>>> origin/master
   const collection = db.collection("page_photos");
   collection.find({}).toArray((err, docs) => {
     assert.equal(err, null);
