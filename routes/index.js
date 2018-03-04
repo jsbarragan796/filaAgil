@@ -107,7 +107,7 @@ router.get("/images", (req, res) => {
   getPhoto((pagePhotos) => res.send(pagePhotos));
 });
 
-// GET ingredientes de Mongo
+/* GET ingredientes de Mongo*/
 router.get("/ingredientes", (req, res) => {
   console.log("se van a entregar ingredientes");
   getIngredients((datos) => res.send(datos));
