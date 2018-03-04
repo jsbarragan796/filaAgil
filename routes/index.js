@@ -34,28 +34,28 @@ function getUsuario (query, callback) {
 router.get("/usuario", (req, res) => {
   getUsuario(
     {
-      correo: req.query.correo,     //crea el query segun los datos que llegan en el req
+      correo: req.query.correo, //crea el query segun los datos que llegan en el req
       pass: req.query.pass
     },
     (usuario) => res.send(usuario)
   );
 });
 
-function find (db, callback) {
+function findPhoto (db, callback) {
   const collection = db.collection("page_photos");
-  collection.find({}).toArray((err, docs) => {
+  collection.findOne({}, ((err, docs) => {
     assert.equal(err, null);
     console.log("Found" + docs.length + "urls");
     callback(docs);
-  });
+  }));
 }
 
-function getPhotos (callback) {
+function getPhoto (callback) {
   MongoClient.connect(url, (err, client) => {
     assert.equal(err, null);
     console.log("Connected");
     const db = client.db("filas_agiles");
-    find(db, callback);
+    findPhoto(db, callback);
     client.close();
   });
 }
@@ -80,7 +80,7 @@ function getIngredients (callback) {
     });
 }
 
-function insertUsuario(query, responder) {
+function insertUsuario (query, responder) {
   const correo = { correo: query.correo };
 
   getUsuario(correo, (resultado) => {
@@ -90,7 +90,7 @@ function insertUsuario(query, responder) {
           const db = client.db("filas_agiles"); //pide la base de datos
           const collection = db.collection("clientes_restaurantes"); //pide la collecion
           collection.insertOne(query)
-            .then( (data) => responder({datos:data,mensaje:"agregado exitoso!"}))
+            .then((data) => responder({ datos: data, mensaje: "agregado exitoso!" }))
             .catch((error) => console.log("se recibio de error:\n" + error.message));
         })
         .catch((error) => console.log("se recibio de error:\n" + error.message));
@@ -104,7 +104,7 @@ function insertUsuario(query, responder) {
 /* GET home page. */
 router.get("/images", (req, res) => {
   console.log("inicio");
-  getPhotos((pagePhotos) => res.send(pagePhotos));
+  getPhoto((pagePhotos) => res.send(pagePhotos));
 });
 
 // GET ingredientes de Mongo
@@ -139,5 +139,32 @@ router.post("/addpedido", function (req, res) {
   console.log(req.body);
   addPedidos(req.body, (mensaje) => res.send(mensaje));
 });
+
+/* Inicio conexion coleccion  sucursales_restaurante. */
+function encontrarSucursales (db, callback) {
+  const collection = db.collection("sucursales_restaurante");
+  // se excluye de la busqueda las contreñas de las sucursales
+  collection.find({}, { nombre: 1, direccion: 1, logo: 1 }).toArray((err, docs) => {
+    assert.equal(err, null);
+    console.log("Found" + docs.length + "urls");
+    callback(docs);
+  });
+}
+/* Inicio conexion base de datos filas_agiles. */
+function getSucursales (callback) {
+  MongoClient.connect(url, (err, client) => {
+    assert.equal(err, null);
+    console.log("Connected");
+    const db = client.db("filas_agiles");
+    encontrarSucursales(db, callback);
+    client.close();
+  });
+}
+
+/* GET Sucursales. */
+router.get("/sucursales", (req, res) => {
+  getSucursales((sucursales) => res.send(sucursales));
+});
+
 
 module.exports = router;
