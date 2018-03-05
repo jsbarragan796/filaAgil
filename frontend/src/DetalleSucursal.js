@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React, { Component } from "react";
 import { Card, CardImg, CardBody,
-  CardTitle, CardSubtitle, Row, Col, Alert } from "reactstrap";
+  CardTitle, CardSubtitle, Row, Col, Alert, Button } from "reactstrap";
 import Login from "./login";
 
 class DetalleSucursal extends Component {
@@ -40,7 +40,8 @@ class DetalleSucursal extends Component {
             <Login error = {this.onMostrar}
               desSeleccionSuc = {this.props.desSeleccionSuc}
               logear={(usuario) => this.props.logear(usuario)}/>
-            <a href="" >¿No tienes cuenta? registrarte!</a>
+            <div><Button href="" >¿No tienes cuenta? registrarte!</Button>
+              <Button href="" >¿Eres administrador?</Button></div>
           </Card>
         </Col>
         <Col sm="3"/>
