@@ -64,7 +64,7 @@ class App extends Component {
     return (
       <div className="App">
         {nav}
-        <div className="Conteiner">
+        <div className="Container">
           {vista}
         </div>
       </div>

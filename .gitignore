@@ -25,4 +25,4 @@ yarn-error.log*
 .eslintrc.js
 
 #graphics gale
-.gal
+*.gal
