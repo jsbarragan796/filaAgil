@@ -5,6 +5,8 @@ import Sucursal from "./Sucursal";
 import DetalleSucursal from "./DetalleSucursal";
 import HacerPedido from "./HacerPedido";
 import Navebar from "./Navebar";
+import NavebarAdmin from "./NavebarAdmin";
+import ControlSucursal from "./ControlSucursal";
 import { Row } from "reactstrap";
 
 class App extends Component {
@@ -14,7 +16,8 @@ class App extends Component {
       images: [],
       sucursales: [],
       sucursalSelecionada: null,
-      usuarioLogeado: null
+      usuarioLogeado: null,
+      adminLogeado: null
     };
   }
   componentDidMount () {
@@ -52,11 +55,26 @@ class App extends Component {
       usuarioLogeado: usuario
     });
   }
+
+  //login de admin
+  adminLogear (admin) {
+    this.setState({
+      adminLogeado: admin
+    });
+  }
+
   usuarioCerrarSesion (usuario) {
     this.setState({
       usuarioLogeado: null
     });
   }
+
+  adminCerrarSesion () {
+    this.setState({
+      adminLogeado: null
+    });
+  }
+
   renderSucursal (s) {
     return (<Sucursal key ={s.nombre} sucursal = {s}
       seleccionSuc = {() => this.seleccionSuc(s)}/>);
@@ -74,6 +92,7 @@ class App extends Component {
         cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
       vista = (<DetalleSucursal
         logear = {(usuario) => this.usuarioLogear(usuario)}
+        logearAdmin = {(admin) => this.adminLogear(admin)}
         usuario = {this.state.usuarioLogeado}
         sucursal={this.state.sucursalSelecionada}
         desSeleccionSuc={() => this.desSeleccionSuc.bind(this)}/>);
@@ -82,6 +101,11 @@ class App extends Component {
       nav = (<Navebar logo={this.state.images.url} usuario={this.state.usuarioLogeado}
         cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
       vista = <HacerPedido sucursal={this.state.sucursalSelecionada} usuario={this.state.usuarioLogeado} />;
+    }
+    if (this.state.adminLogeado !== null) {
+      nav = (<NavebarAdmin logo={this.state.images.url} admin={this.state.adminLogeado}
+        cerrarSesion = {() => this.adminCerrarSesion()}/>);
+      vista = <ControlSucursal sucursal={this.state.adminLogeado} />;
     }
     return (
       <div className="App">
