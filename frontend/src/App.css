@@ -4,7 +4,7 @@
 
 
 .App-header {
-  background-color: #125688;
+  background-color: #C0A586;
   height: 150px;
   padding: 20px;
   color: white;
@@ -20,4 +20,9 @@
 
 .Conteiner{
   padding:75px 8% 0 8%;
+}
+
+
+.navbar-custom {
+  background-color: #C0A586;
 }

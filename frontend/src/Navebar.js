@@ -1,41 +1,50 @@
 /* eslint react/prop-types: 0 */
 import React, { Component } from "react";
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from "reactstrap";
+import "./App.css";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink, Button } from "reactstrap";
 
 class Navebar extends Component {
   constructor (props) {
     super(props);
-
-    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.toggle = this.toggle.bind(this);
     this.state = {
-      collapsed: true
+      isOpen: false
     };
   }
-
-  toggleNavbar () {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
+  toggle () {
+    this.setState({ isOpen: !this.state.isOpen });
   }
-
   render () {
-    let logo = null;
-    if (!this.props.logo === null) {
-      logo = <NavbarBrand href={this.props.logo} className="mr-auto"> Filas agiles</NavbarBrand>;
+    let usuarioNombre = null;
+    let cerrarSesion = null;
+    if (this.props.usuario !== null) {
+      usuarioNombre = (<NavItem>
+        <NavLink >{"Hola, " + this.props.usuario.username}</NavLink>
+      </NavItem>);
+      cerrarSesion = (<NavItem>
+        <Button onClick={this.props.cerrarSesion}>Cerrar Sesion</Button>
+      </NavItem>);
+    } else {
+      cerrarSesion = null;
     }
     return (
       <div>
-        <Navbar color="faded" light>
-          {logo}
-          <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-          <Collapse isOpen={!this.state.collapsed} navbar>
-            <Nav navbar>
-              <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">Github</NavLink>
-              </NavItem>
+        <Navbar className="navbar-custom" expand="md">
+          <NavbarBrand href="/">
+            <img src={this.props.logo} alt="logo" height="50"/>
+          </NavbarBrand>
+          <NavbarToggler onClick={this.toggle} />
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              {usuarioNombre}
+              {cerrarSesion}
             </Nav>
           </Collapse>
         </Navbar>
@@ -43,4 +52,5 @@ class Navebar extends Component {
     );
   }
 }
+
 export default Navebar;

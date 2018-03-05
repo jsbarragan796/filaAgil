@@ -9,7 +9,7 @@ var router = new express.Router();
 const url = process.env.MLAB;
 
 /*encuentra un usuario segun las credenciales*/
-function findUsuario(query, db, callback) {
+function findUsuario (query, db, callback) {
   const collection = db.collection("clientes_restaurantes");
   collection.findOne(query, { fields: { _id: 0, pass: 0 } }, (err, docs) => {
     assert.equal(err, null); //se revisan que no se den errores.
@@ -20,7 +20,7 @@ function findUsuario(query, db, callback) {
 }
 
 /* Permite encontrar a un usuario en la base de datos*/
-function getUsuario(query, callback) {
+function getUsuario (query, callback) {
   MongoClient.connect(url, (err, client) => { // conexion a la base de datos
     assert.equal(err, null);
     console.log("Connected");
@@ -41,7 +41,7 @@ router.get("/usuario", (req, res) => {
   );
 });
 
-function findPhoto(db, callback) {
+function findPhoto (db, callback) {
   const collection = db.collection("page_photos");
   collection.findOne({}, ((err, docs) => {
     assert.equal(err, null);
@@ -50,7 +50,7 @@ function findPhoto(db, callback) {
   }));
 }
 
-function getPhoto(callback) {
+function getPhoto (callback) {
   MongoClient.connect(url, (err, client) => {
     assert.equal(err, null);
     console.log("Connected");
@@ -60,7 +60,7 @@ function getPhoto(callback) {
   });
 }
 
-function getIngredients(callback) {
+function getIngredients (callback) {
   // conexion a la base de datos
   MongoClient.connect(url)
     .then((client) => { //una vez conectado
@@ -80,7 +80,7 @@ function getIngredients(callback) {
     });
 }
 
-function insertUsuario(query, responder) {
+function insertUsuario (query, responder) {
   const correo = { correo: query.correo };
 
   getUsuario(correo, (resultado) => {
@@ -117,14 +117,14 @@ router.post("/usuario", (req, res) => {
   insertUsuario(req.body, (mensaje) => res.send(mensaje));
 });
 
-function addPedido(pedido, db, callback) {
+function addPedido (pedido, db, callback) {
   const collection = db.collection("pedidos");
   collection.insert(pedido).then(() =>
     callback("insertado con exito")
   );
 }
 
-function addPedidos(pedido, callback) {
+function addPedidos (pedido, callback) {
   MongoClient.connect(url, (err, client) => {
     assert.equal(err, null);
     console.log("Connected");
@@ -141,7 +141,7 @@ router.post("/addpedido", function (req, res) {
 });
 
 /* Inicio conexion coleccion  sucursales_restaurante. */
-function encontrarSucursales(db, callback) {
+function encontrarSucursales (db, callback) {
   const collection = db.collection("sucursales_restaurante");
   // se excluye de la busqueda las contreñas de las sucursales
   collection.find({}, { fields: { pass: 0 } }).toArray((err, docs) => {
@@ -151,7 +151,7 @@ function encontrarSucursales(db, callback) {
   });
 }
 
-function getSucursal(sucursal, callback) {
+function getSucursal (sucursal, callback) {
   MongoClient.connect(url)
     .then((client) => {
       const db = client.db("filas_agiles");
@@ -167,7 +167,7 @@ function getSucursal(sucursal, callback) {
     .catch((error) => console.log("se encontro el error:\n" + error.message));
 }
 
-function getPedidosByUsuario(correo, callback) {
+function getPedidosByUsuario (correo, callback) {
   MongoClient.connect(url)
     .then((client) => {
       const db = client.db("filas_agiles");
@@ -180,7 +180,7 @@ function getPedidosByUsuario(correo, callback) {
     .catch((error) => console.log("se encontro el error:\n" + error.message));
 }
 
-function getPedidosBySucursal(nombre, callback) {
+function getPedidosBySucursal (nombre, callback) {
   MongoClient.connect(url)
     .then((client) => {
       const db = client.db("filas_agiles");
@@ -195,7 +195,7 @@ function getPedidosBySucursal(nombre, callback) {
 
 
 /*AUCH*/
-function getIngredientesBySucursal(nombre, callback) {
+function getIngredientesBySucursal (nombre, callback) {
   const ingredientes = {
     arroz: 0,
     grano: 0,
@@ -211,7 +211,7 @@ function getIngredientesBySucursal(nombre, callback) {
       const db = client.db("filas_agiles");
       const collection = db.collection("pedidos");
 
-      let numArroz = collection.find({ "sucursal.nombre": nombre, "arroz.tipos": { $ne: null } }, { fields: { "arroz.tipos": 1, _id: 0 } }).toArray()
+      let numArroz = collection.find({ "sucursal.nombre": nombre, "arroz.tipos": { $ne: null } }, { fields: { "arroz.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.arroz.tipos);
           t.map((d) => {
@@ -219,7 +219,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numGrano = collection.find({ "sucursal.nombre": nombre, "grano.tipos": { $ne: null } }, { fields: { "grano.tipos": 1, _id: 0 } }).toArray()
+      let numGrano = collection.find({ "sucursal.nombre": nombre, "grano.tipos": { $ne: null } }, { fields: { "grano.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.grano.tipos);
           t.map((d) => {
@@ -227,7 +227,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numCarnes = collection.find({ "sucursal.nombre": nombre, "carnes.tipos": { $ne: null } }, { fields: { "carnes.tipos": 1, _id: 0 } }).toArray()
+      let numCarnes = collection.find({ "sucursal.nombre": nombre, "carnes.tipos": { $ne: null } }, { fields: { "carnes.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.carnes.tipos);
           t.map((d) => {
@@ -235,7 +235,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numAdiciones = collection.find({ "sucursal.nombre": nombre, "adiciones.tipos": { $ne: null } }, { fields: { "adiciones.tipos": 1, _id: 0 } }).toArray()
+      let numAdiciones = collection.find({ "sucursal.nombre": nombre, "adiciones.tipos": { $ne: null } }, { fields: { "adiciones.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.adiciones.tipos);
           t.map((d) => {
@@ -243,7 +243,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numSalsas = collection.find({ "sucursal.nombre": nombre, "salsas.tipos": { $ne: null } }, { fields: { "salsas.tipos": 1, _id: 0 } }).toArray()
+      let numSalsas = collection.find({ "sucursal.nombre": nombre, "salsas.tipos": { $ne: null } }, { fields: { "salsas.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.salsas.tipos);
           t.map((d) => {
@@ -251,7 +251,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numExtras = collection.find({ "sucursal.nombre": nombre, "extras.tipos": { $ne: null } }, { fields: { "extras.tipos": 1, _id: 0 } }).toArray()
+      let numExtras = collection.find({ "sucursal.nombre": nombre, "extras.tipos": { $ne: null } }, { fields: { "extras.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.extras.tipos);
           t.map((d) => {
@@ -259,7 +259,7 @@ function getIngredientesBySucursal(nombre, callback) {
           });
         });
 
-      let numBebidas = collection.find({ "sucursal.nombre": nombre, "bebidas.tipos": { $ne: null } }, { fields: { "bebidas.tipos": 1, _id: 0 } }).toArray()
+      let numBebidas = collection.find({ "sucursal.nombre": nombre, "bebidas.tipos": { $ne: null } }, { fields: { "bebidas.tipos": 1, "_id": 0 } }).toArray()
         .then((datos) => {
           const t = datos.map((d) => d.bebidas.tipos);
           t.map((d) => {
@@ -275,7 +275,7 @@ function getIngredientesBySucursal(nombre, callback) {
 }
 
 /* Inicio conexion base de datos filas_agiles. */
-function getSucursales(callback) {
+function getSucursales (callback) {
   MongoClient.connect(url, (err, client) => {
     assert.equal(err, null);
     console.log("Connected");

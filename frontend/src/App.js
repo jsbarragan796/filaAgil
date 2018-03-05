@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       images: [],
       sucursales: [],
-      sucursalSelecionada: null
+      sucursalSelecionada: null,
+      usuarioLogeado: null
     };
   }
   componentDidMount () {
@@ -44,10 +45,22 @@ class App extends Component {
       sucursalSelecionada: null
     });
   }
+  //login
+  usuarioLogear (usuario) {
+    this.setState({
+      usuarioLogeado: usuario
+    });
+  }
+  usuarioCerrarSesion (usuario) {
+    this.setState({
+      usuarioLogeado: null
+    });
+  }
   renderSucursal (s) {
     return (<Sucursal key ={s.nombre} sucursal = {s}
       seleccionSuc = {() => this.seleccionSuc(s)}/>);
   }
+
 
   render () {
     let vista = <Row >{this.state.sucursales.map((p) => this.renderSucursal(p))}</Row>;
@@ -56,8 +69,11 @@ class App extends Component {
       <h1 className="App-title">Bienvenido a Fila Agil</h1>
     </header>);
     if (this.state.sucursalSelecionada !== null) {
-      nav = <Navebar logo={this.state.images.url}/>;
+      nav = (<Navebar logo={this.state.images.url} usuario={this.state.usuarioLogeado}
+        cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
       vista = (<DetalleSucursal
+        logear = {(usuario) => this.usuarioLogear(usuario)}
+        usuario = {this.state.usuario}
         sucursal={this.state.sucursalSelecionada}
         desSeleccionSuc={() => this.desSeleccionSuc.bind(this)}/>);
     }
