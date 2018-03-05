@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 import React, { Component } from "react";
-import { Card, CardBody,
-  Row, Col, Button, Label, Input, Form, FormGroup } from "reactstrap";
+import { Button, Label, Input, Form, FormGroup } from "reactstrap";
 
 class Login extends Component {
   constructor (props) {
@@ -59,6 +58,7 @@ class Login extends Component {
             value={this.state.pass} onChange={this.manejoContrasenia} autoComplete="off"/>
         </FormGroup>
         <Button onClick={this.manejoLogin}>Entrar</Button>
+        <Button onClick={this.props.desSeleccionSuc()}>Atrás</Button>
       </Form>
 
     );
