@@ -50,12 +50,12 @@ class App extends Component {
   }
 
   render () {
-    let vista = <Row >{this.state.sucursales.map((p) => {return this.renderSucursal(p);})}</Row>;
+    let vista = <Row >{this.state.sucursales.map((p) => this.renderSucursal(p))}</Row>;
     let nav = (<header className="App-header">
       <img src={this.state.images.url} alt="logo" height="100"/>
       <h1 className="App-title">Bienvenido a Fila Agil</h1>
     </header>);
-    if (!this.state.sucursalSelecionada === null) {
+    if (this.state.sucursalSelecionada !== null) {
       nav = <Navebar logo={this.state.images.url}/>;
       vista = (<DetalleSucursal
         sucursal={this.state.sucursalSelecionada}

@@ -14,7 +14,7 @@ class Sucursal extends Component {
           </CardBody>
           <CardImg width="100px" src={this.props.sucursal.logo} alt={"logo resturant " + this.props.sucursal.nombre} />
           <CardBody>
-            <Button onClick={() => {this.props.seleccionSuc();}}>Estoy haciendo fila aquí</Button>
+            <Button onClick={() => {this.props.seleccionSuc();}}>Estoy aquí</Button>
           </CardBody>
         </Card>
       </Col>
