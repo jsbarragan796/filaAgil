@@ -144,7 +144,7 @@ router.post("/addpedido", function (req, res) {
 function encontrarSucursales (db, callback) {
   const collection = db.collection("sucursales_restaurante");
   // se excluye de la busqueda las contreñas de las sucursales
-  collection.find({}, { nombre: 1, direccion: 1, logo: 1 }).toArray((err, docs) => {
+  collection.find({}, { fields: { pass: 0 } }).toArray((err, docs) => {
     assert.equal(err, null);
     console.log("Found" + docs.length + "urls");
     callback(docs);
