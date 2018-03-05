@@ -15,19 +15,18 @@ class ControlSucursal extends Component {
     super(props);
     this.state = {
       sucursal: this.props.sucursal,
-      valor: 0,
-      pedidos: null
+      pedidos: null,
+      ingredientes: null
     };
   }
 
-  componentDidMount () {
+  componentWillMount () {
     this.cambio();
   }
 
   cambio () {
-    const val = this.state.valor;
     this.getPedidos();
-    this.setState({ valor: val + 1 });
+    this.getIngredientes();
   }
 
   getPedidos () {
@@ -41,12 +40,24 @@ class ControlSucursal extends Component {
       .catch((error) => console.log("se encontro el error:\n"));
   }
 
+  getIngredientes () {
+    const query = "api/sucursal/ingredientes?nombre=" + this.state.sucursal.nombre;
+    fetch(query)
+      .then((data) => {
+        return data.json();
+      }).then((ingredientes) => {
+        this.setState({ ingredientes: ingredientes });
+      })
+      .catch((error) => console.log("se encontro el error:\n"));
+  }
+
   render () {
     setInterval(this.cambio.bind(this), 60000); //actualiza la info cada minuto (60 segs)
     let pedidos = null;
+    let ingredientes = null;
     if (this.state.pedidos !== null) {
       pedidos = this.state.pedidos.map((pedido) => (
-        <Col sm="3" key={pedido.fechaRealizado} >
+        <Col sm="4" key={pedido.fechaRealizado} >
           <Card>
             <CardBody>
               <CardSubtitle>Fecha: {pedido.fechaRealizado}</CardSubtitle>
@@ -65,6 +76,41 @@ class ControlSucursal extends Component {
         </Col>
       ));
     }
+    if (this.state.ingredientes !== null) {
+      ingredientes = (
+        <Row>
+          <Col sm = "4">
+            <h4> pedidos de arroz totales:</h4>
+            {this.state.ingredientes.arroz}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de grano totales:</h4>
+            {this.state.ingredientes.grano}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de carnes totales:</h4>
+            {this.state.ingredientes.carnes}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de adiciones totales:</h4>
+            {this.state.ingredientes.adiciones}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de salsas totales:</h4>
+            {this.state.ingredientes.salsas}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de extras totales:</h4>
+            {this.state.ingredientes.extras}
+          </Col>
+          <Col sm = "4">
+            <h4> pedidos de bebidas totales:</h4>
+            {this.state.ingredientes.bebidas}
+          </Col>
+        </Row>
+      );
+    }
+
     return (
       <div>
         <h1>Sucursal: {this.state.sucursal.nombre}</h1>
@@ -76,7 +122,13 @@ class ControlSucursal extends Component {
         <Row>
           {pedidos}
         </Row>
-        <p>{this.state.valor}</p>
+        <h3 className="abajo" >Uso de ingredientes:</h3>
+        <Row>
+          <br/>
+          <br/>
+          <br/>
+          {ingredientes}
+        </Row>
       </div>);
   }
 }
