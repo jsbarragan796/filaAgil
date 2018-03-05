@@ -20,18 +20,19 @@ class LoginAdmin extends Component {
 
   manejoLogin () {
     console.log("pass: " + this.state.pass);
-    fetch("api/sucursal?nombre=" + this.props.sucursal + "pass=" + this.state.pass)
+    console.log("nombre: " + this.state.sucursal);
+    fetch("api/sucursal?nombre=" + this.props.sucursal + "&pass=" + this.state.pass)
       .then((res) => {
         return res.json();
       })
-      .then((usuario) => {
-        if (usuario.username === undefined) {
-          console.log("error" + usuario);
+      .then((sucursalEntrada) => {
+        if (sucursalEntrada.nombre === undefined) {
+          console.log("error: \n" + sucursalEntrada);
           this.props.error();
         } else {
-          //callback al padre para que sepa el usuariologeado
-          this.props.logear(usuario);
-          console.log("feliz " + usuario.username);
+          //callback al padre para que sepa el sucursalEntradalogeado
+          this.props.logear(sucursalEntrada);
+          console.log("feliz " + sucursalEntrada.nombre);
         }
       })
       .catch((err) => console.log(err));
@@ -39,12 +40,11 @@ class LoginAdmin extends Component {
 
   render () {
     return (
-
       <Form >
         <FormGroup>
           <Label for="examplePassword">Contraseña</Label>
           <Input type="password" name="pass" id="examplePassword" placeholder="Contraseña"
-            value={this.state.pass} autoComplete="off" />
+            value={this.state.pass} onChange={this.manejoContrasenia} autoComplete="off" />
         </FormGroup>
         <Button onClick={this.manejoLogin}>Entrar</Button>
         <Button onClick={this.props.desSeleccionSuc()}>Atrás</Button>

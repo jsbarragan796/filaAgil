@@ -44,9 +44,11 @@ class DetalleSucursal extends Component {
       logeo = (
         <div>
           <LoginAdmin
+            error={this.onMostrar}
+            logear = {(admin) => this.props.logearAdmin(admin)}
             desSeleccionSuc={this.props.desSeleccionSuc}
             sucursal = {sucursal.nombre} />
-          <Button onClick={this.saleAdmin()}>¿No eres administrador?</Button>
+          <Button onClick={this.saleAdmin}>¿No eres administrador?</Button>
         </div>
       );
     } else {
@@ -55,7 +57,7 @@ class DetalleSucursal extends Component {
         logear={(usuario) => this.props.logear(usuario)} />
       <div>
         <Button href="" >¿No tienes cuenta? registrarte!</Button>
-        <Button onClick={this.entraAdmin()}>¿Eres administrador?</Button>
+        <Button onClick={this.entraAdmin}>¿Eres administrador?</Button>
       </div>
       </div>);
     }
