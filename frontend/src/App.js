@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Sucursal from "./Sucursal";
 import DetalleSucursal from "./DetalleSucursal";
+import HacerPedido from "./HacerPedido";
 import Navebar from "./Navebar";
 import { Row } from "reactstrap";
 
@@ -68,14 +69,19 @@ class App extends Component {
       <img src={this.state.images.url} alt="logo" height="100"/>
       <h1 className="App-title">Bienvenido a Fila Agil</h1>
     </header>);
-    if (this.state.sucursalSelecionada !== null) {
+    if (this.state.sucursalSelecionada !== null && this.state.usuarioLogeado === null) {
       nav = (<Navebar logo={this.state.images.url} usuario={this.state.usuarioLogeado}
         cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
       vista = (<DetalleSucursal
         logear = {(usuario) => this.usuarioLogear(usuario)}
-        usuario = {this.state.usuario}
+        usuario = {this.state.usuarioLogeado}
         sucursal={this.state.sucursalSelecionada}
         desSeleccionSuc={() => this.desSeleccionSuc.bind(this)}/>);
+    }
+    if (this.state.sucursalSelecionada !== null && this.state.usuarioLogeado !== null) {
+      nav = (<Navebar logo={this.state.images.url} usuario={this.state.usuarioLogeado}
+        cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
+      vista = <HacerPedido />;
     }
     return (
       <div className="App">

@@ -34,6 +34,7 @@ class Login extends Component {
       .then((usuario) => {
         if (usuario.username === undefined) {
           console.log("error" + usuario);
+          this.props.error();
         } else {
           //callback al padre para que sepa el usuariologeado
           this.props.logear(usuario);
