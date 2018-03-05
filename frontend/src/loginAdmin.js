@@ -2,14 +2,13 @@
 import React, { Component } from "react";
 import { Button, Label, Input, Form, FormGroup } from "reactstrap";
 
-class Login extends Component {
+class LoginAdmin extends Component {
   constructor (props) {
     super(props);
     this.manejoContrasenia = this.manejoContrasenia.bind(this);
-    this.manejoCorreo = this.manejoCorreo.bind(this);
     this.manejoLogin = this.manejoLogin.bind(this);
     this.state = {
-      correo: "",
+      sucursal: this.props.sucursal,
       pass: ""
     };
   }
@@ -19,15 +18,9 @@ class Login extends Component {
     console.log("pass: " + e.target);
   }
 
-  manejoCorreo (e) {
-    this.setState({ correo: e.target.value });
-    console.log("correo: " + e);
-  }
-
   manejoLogin () {
-    console.log("Correo: " + this.state.correo);
     console.log("pass: " + this.state.pass);
-    fetch("api/usuario?correo=" + this.state.correo + "&pass=" + this.state.pass)
+    fetch("api/sucursal?nombre=" + this.props.sucursal + "pass=" + this.state.pass)
       .then((res) => {
         return res.json();
       })
@@ -49,14 +42,9 @@ class Login extends Component {
 
       <Form >
         <FormGroup>
-          <Label for="exampleEmail">Correo Eléctronico</Label>
-          <Input type="email" name="correo" id="exampleEmail" placeholder="ejemplo@elemplo.com"
-            value={this.state.correo} onChange={this.manejoCorreo}/>
-        </FormGroup>
-        <FormGroup>
           <Label for="examplePassword">Contraseña</Label>
           <Input type="password" name="pass" id="examplePassword" placeholder="Contraseña"
-            value={this.state.pass} onChange={this.manejoContrasenia} autoComplete="off"/>
+            value={this.state.pass} autoComplete="off" />
         </FormGroup>
         <Button onClick={this.manejoLogin}>Entrar</Button>
         <Button onClick={this.props.desSeleccionSuc()}>Atrás</Button>
@@ -65,4 +53,4 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+export default LoginAdmin;
