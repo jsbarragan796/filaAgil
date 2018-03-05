@@ -6,10 +6,17 @@ This is a web application to make orders in buffet-like restaurants without havi
 This is a project for a web development class in [Uniandes](https://www.uniandes.edu.co). The objective is to make a quick project using node, MongoDB and ReactJS. We have decided to make this project after [Juan Sebastian](https://github.com/jsbarragan796) saw a lot of problems happening on a buffet restaurant due to lack of organization on how the restaurant was taking the orders.
 
 ## Getting Started
-__under construction__
+if you want to run this project you are going to need ```npm```(or ```yarn```) and ```mongodb```. We recommend you to use env variables to connect to the db.
 
 ## Deployment
-__under construction__
+Once you have what you need and the proyect downloaded into your pc, open a console and enter en "front end" folder and run:
+```npm install```
+```npm start build```
+that way you will have the Reactjs front end application ready. Now go back to the main folder and run:
+```npm install```
+```npm start```
+Then the app will be up and running
+
 
 ## Authors
 * [__Juan Sebastian__](https://github.com/jsbarragan796)
