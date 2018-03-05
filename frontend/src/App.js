@@ -45,7 +45,7 @@ class App extends Component {
     });
   }
   renderSucursal (s) {
-    return (<Sucursal sucursal = {s}
+    return (<Sucursal key ={s.nombre} sucursal = {s}
       seleccionSuc = {() => this.seleccionSuc(s)}/>);
   }
 
