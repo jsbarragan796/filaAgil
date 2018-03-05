@@ -81,7 +81,7 @@ class App extends Component {
     if (this.state.sucursalSelecionada !== null && this.state.usuarioLogeado !== null) {
       nav = (<Navebar logo={this.state.images.url} usuario={this.state.usuarioLogeado}
         cerrarSesion = {() => this.usuarioCerrarSesion()}/>);
-      vista = <HacerPedido />;
+      vista = <HacerPedido sucursal={this.state.sucursalSelecionada} usuario={this.state.usuarioLogeado} />;
     }
     return (
       <div className="App">
