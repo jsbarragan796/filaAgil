@@ -14,9 +14,10 @@ class ControlSucursal extends Component {
     this.setState({ valor: val + 1 });
   }
   render () {
-    setInterval(this.cambio.bind(this), 6000);
+    setInterval(this.cambio.bind(this), 60000);
     return (<div>
-      <p>{this.state.sucursal.nombre}</p>
+      <h1>Sucursal: {this.state.sucursal.nombre}</h1>
+      <h2>Direccion: {this.state.sucursal.direccion}</h2>
       <p>{this.state.valor}</p>
     </div>);
   }
