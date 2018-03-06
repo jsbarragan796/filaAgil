@@ -1,87 +1,25 @@
 /* eslint react/prop-types: 0 */
+import IngredientesPedidoCliente from "./IngredientesPedidoCliente";
 import React, { Component } from "react";
-import { Button, Form, FormGroup, Label, Input, FormText,
-  Row, Col, Card, CardImg, CardBody,
+import { Button,
+  Row, Col, Card, CardBody,
   CardTitle, CardSubtitle, Alert } from "reactstrap";
 
 class HacerPedido extends Component {
   constructor (props) {
     super(props);
-    this.manejoContrasenia = this.manejoContrasenia.bind(this);
-    this.manejoCorreo = this.manejoCorreo.bind(this);
-    this.manejoLogin = this.manejoLogin.bind(this);
     this.state = {
       ingredientes: [],
-      pedidos: [],
+      pedidos: null,
       cSelected: [],
-      orden: {
-        fechaRealizado: "",
-        sucursal: {
-          nombre: "sur"
-        },
-        cliente: {
-          correo: ""
-        },
-        arroz: {
-          precio: 100,
-          tipos: [
-            "Blanco",
-            "Integral",
-            "Fideos"
-          ]
-        },
-        grano: {
-          precio: 150,
-          tipos: [
-            "Lentejas",
-            "Frijol Negro"
-          ]
-        },
-        carnes: {
-          precio: 200,
-          tipos: [
-            "Costillitas BBQ",
-            "Molida",
-            "Pollo Parrilla"
-          ]
-        },
-        adiciones: {
-          precio: 180,
-          tipos: [
-            "Verduras",
-            "Nachos"
-          ]
-        },
-        salsas: {
-          precio: 100,
-          tipos: [
-            "Queso parmesano",
-            "Tomates asados",
-            "Salsa de la casa",
-            "Salsa misteriosa"
-          ]
-        },
-        extras: {
-          precio: 150,
-          tipos: [
-            "Huevo",
-            "Pimenton picado",
-            "Huevo de codorniz"
-          ]
-        },
-        bebidas: {
-          precio: 170,
-          tipos: [
-            "Te",
-            "Gaseosa"
-          ]
-        }
-      }
+      visible: false
     };
+    this.onDismiss = this.onDismiss.bind(this);
+    this.onMostrar = this.onMostrar.bind(this);
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
+    this.volverPedir = this.volverPedir.bind(this);
   }
-
 
   componentDidMount () {
     fetch("api/ingredientes")
@@ -102,46 +40,53 @@ class HacerPedido extends Component {
       })
       .catch((err) => console.log(err));
   }
-
-  //login
-  manejoContrasenia (e) {
-    this.setState({ pass: e.target.value });
-    console.log("pass: " + e.target);
-  }
-
-  manejoCorreo (e) {
-    this.setState({ correo: e.target.value });
-    console.log("correo: " + e);
-  }
-
-  manejoLogin () {
-    console.log("Correo: " + this.state.correo);
-    console.log("pass: " + this.state.pass);
-    fetch("api/usuario?correo=" + this.state.correo + "&pass=" + this.state.pass)
+  onMostrar (err) {
+    this.setState({ visible: true });
+    fetch("api/usuario/pedidos?correo=" + this.props.usuario.correo)
       .then((res) => {
         return res.json();
       })
-      .then((usuario) => {
-        if (usuario.username === undefined) {
-          console.log("error" + usuario);
-          this.props.error();
-        } else {
-          //callback al padre para que sepa el usuariologeado
-          this.props.logear(usuario);
-          console.log("feliz " + usuario.username);
-        }
+      .then((pedidos) => {
+        this.setState({ pedidos: pedidos });
       })
       .catch((err) => console.log(err));
   }
 
-  onRadioBtnClick (rSelected) {
-    this.setState({ rSelected });
+  onDismiss () {
+    this.setState({ visible: false });
   }
 
-  agregarOrden (i) {
-    let orden = this.state.orden;
-    //    if(orden)
-    this.setState({ orden: orden });
+  entraAdmin () {
+    this.setState({ admin: true });
+  }
+  volverPedir (orden) {
+    let event = new Date();
+    orden.fechaRealizado = event.toISOString();
+    orden.sucursal.nombre = this.props.sucursal.nombre;
+    Reflect.deleteProperty(orden, "_id");
+    fetch("api/addpedido", { method: "POST", body: JSON.stringify(orden),
+      headers: { "Content-Type": "application/json" } })
+      .then((res) => {
+        return res.json();
+      })
+      .then((resp) => {
+        if (resp === undefined) {
+          console.log("error");
+        } else {
+          //callback al padre para que sepa el usuariologeado
+          this.onMostrar();
+          console.log("intentando ");
+        }
+      })
+      .catch((err) => {
+        this.onMostrar();
+        console.log(err);
+      }
+      );
+  }
+
+  onRadioBtnClick (rSelected) {
+    this.setState({ rSelected });
   }
 
   onCheckboxBtnClick (selected, p) {
@@ -155,6 +100,29 @@ class HacerPedido extends Component {
   }
   render () {
     let form = null;
+    let pedidos = null;
+    if (this.state.pedidos !== null) {
+      pedidos = this.state.pedidos.map((pedido) => (
+        <Col sm="4" key={pedido._id} >
+          <Card>
+            <CardBody>
+              <CardSubtitle>Fecha: {pedido.fechaRealizado}</CardSubtitle>
+              <div>
+                <IngredientesPedidoCliente
+                  bebidas={pedido.bebidas}
+                  extras={pedido.extras}
+                  salsas={pedido.salsas}
+                  adiciones={pedido.adiciones}
+                  carnes={pedido.carnes}
+                  arroz={pedido.arroz}
+                  grano={pedido.grano}
+                  volverPedir={() => this.volverPedir(pedido)}/>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+      ));
+    }
     if (this.state.ingredientes.length > 0) {
       form = (
         <div>
@@ -180,15 +148,23 @@ class HacerPedido extends Component {
       );
     }
     return (
-      <Row >
-        <Col sm="2"/>
-        <Col sm="8">
-          <h1>Arma tu pedido</h1>
-          {form}
-        </Col>
-        <Col sm="2"/>
-      </Row>
-    );
+      <div>
+        <Row >
+          <Col sm="2"/>
+          <Col sm="8">
+            <h1>Arma tu pedido</h1>
+            {form}
+          </Col>
+          <Col sm="2"/>
+        </Row>
+        <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+          { this.props.usuario.username + " ya tomamos tu pedido!"}
+        </Alert>
+        <h1>Vuelve a pedir de tus pedidos anteriores</h1>
+        <Row >
+          {pedidos}
+        </Row>
+      </div>);
   }
 }
 export default HacerPedido;
