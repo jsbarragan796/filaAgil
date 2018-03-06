@@ -27,12 +27,11 @@ class LoginAdmin extends Component {
       })
       .then((sucursalEntrada) => {
         if (sucursalEntrada.nombre === undefined) {
-          console.log("error: \n" + sucursalEntrada);
-          this.props.error();
+          let err = { mensaje: "Contraseña incorrecta", tipo: "danger" };
+          this.props.error(err);
         } else {
           //callback al padre para que sepa el sucursalEntradalogeado
           this.props.logear(sucursalEntrada);
-          console.log("feliz " + sucursalEntrada.nombre);
         }
       })
       .catch((err) => console.log(err));
@@ -47,7 +46,6 @@ class LoginAdmin extends Component {
             value={this.state.pass} onChange={this.manejoContrasenia} autoComplete="off" />
         </FormGroup>
         <Button onClick={this.manejoLogin}>Entrar</Button>
-        <Button onClick={this.props.desSeleccionSuc()}>Atrás</Button>
       </Form>
 
     );

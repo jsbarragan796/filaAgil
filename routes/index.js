@@ -14,7 +14,7 @@ function findUsuario (query, db, callback) {
   collection.findOne(query, { fields: { _id: 0, pass: 0 } }, (err, docs) => {
     assert.equal(err, null); //se revisan que no se den errores.
     console.log("Found " + JSON.stringify(docs) + " urls");
-    if (docs === null) docs = { error: "credenciales incorrectas" }; //sino se encuentra el usuario, se responde con un error
+    if (docs === null || docs === undefined) docs = { error: "credenciales incorrectas" }; //sino se encuentra el usuario, se responde con un error
     callback(docs); //se responde con el usuario
   });
 }
@@ -113,7 +113,7 @@ router.get("/ingredientes", (req, res) => {
   getIngredients((datos) => res.send(datos));
 });
 
-router.post("/usuario", (req, res) => {
+router.post("/addUsuario", (req, res) => {
   insertUsuario(req.body, (mensaje) => res.send(mensaje));
 });
 

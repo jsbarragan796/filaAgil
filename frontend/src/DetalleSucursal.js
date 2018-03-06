@@ -6,27 +6,39 @@ import {
 } from "reactstrap";
 import Login from "./login";
 import LoginAdmin from "./loginAdmin";
+import Registro from "./registro";
 
 class DetalleSucursal extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
-      visible: false,
-      admin: false
+      visibleS: false,
+      visibleD: false,
+      admin: false,
+      registro: false,
+      mensaje: ""
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onMostrar = this.onMostrar.bind(this);
     this.entraAdmin = this.entraAdmin.bind(this);
     this.saleAdmin = this.saleAdmin.bind(this);
+    this.entraRegistro = this.entraRegistro .bind(this);
+    this.saleRegistro = this.saleRegistro.bind(this);
   }
 
-  onMostrar () {
-    this.setState({ visible: true });
+  onMostrar (err) {
+    this.setState({ mensaje: err.mensaje });
+    if (err.tipo === "danger") {
+      this.setState({ visibleD: true });
+    } else {
+      this.setState({ visibleS: true });
+    }
   }
 
   onDismiss () {
-    this.setState({ visible: false });
+    this.setState({ visibleS: false });
+    this.setState({ visibleD: false });
   }
 
   entraAdmin () {
@@ -37,14 +49,31 @@ class DetalleSucursal extends Component {
     this.setState({ admin: false });
   }
 
+  entraRegistro () {
+    this.setState({ registro: true });
+  }
+
+  saleRegistro () {
+    this.setState({ registro: false });
+  }
+
   render () {
     let sucursal = this.props.sucursal;
     let logeo = null;
-    if (this.state.admin) {
+    if (this.state.registro) {
+      logeo = (
+        <div>
+          <Registro
+            saleRegistro={this.saleRegistro}
+            error={(err) => this.onMostrar(err)}/>
+          <Button onClick={this.saleRegistro}>Cancelar</Button>
+        </div>
+      );
+    } else if (this.state.admin) {
       logeo = (
         <div>
           <LoginAdmin
-            error={this.onMostrar}
+            error={(err) => this.onMostrar(err)}
             logear = {(admin) => this.props.logearAdmin(admin)}
             desSeleccionSuc={this.props.desSeleccionSuc}
             sucursal = {sucursal.nombre} />
@@ -52,21 +81,24 @@ class DetalleSucursal extends Component {
         </div>
       );
     } else {
-      logeo = (<div><Login error={this.onMostrar}
-        desSeleccionSuc={this.props.desSeleccionSuc}
-        logear={(usuario) => this.props.logear(usuario)} />
-      <div>
-        <Button href="" >¿No tienes cuenta? registrarte!</Button>
+      logeo = (
+        <div><Login error={(err) => this.onMostrar(err)}
+          desSeleccionSuc={this.props.desSeleccionSuc}
+          logear={(usuario) => this.props.logear(usuario)} />
+        <Button onClick={this.entraRegistro} >¿No tienes cuenta? registrarte!</Button>
         <Button onClick={this.entraAdmin}>¿Eres administrador?</Button>
-      </div>
-      </div>);
+        </div>
+      );
     }
     return (
       <Row >
         <Col sm="3" />
         <Col sm="6">
-          <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-            Credenciales incorrectas!
+          <Alert color="success" isOpen={this.state.visibleS} toggle={this.onDismiss}>
+            {this.state.mensaje}
+          </Alert>
+          <Alert color="danger" isOpen={this.state.visibleD} toggle={this.onDismiss}>
+            {this.state.mensaje}
           </Alert>
           <Card>
             <CardBody>

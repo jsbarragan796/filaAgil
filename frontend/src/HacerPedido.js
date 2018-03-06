@@ -14,7 +14,69 @@ class HacerPedido extends Component {
       ingredientes: [],
       pedidos: [],
       cSelected: [],
-      orden: {}
+      orden: {
+        fechaRealizado: "",
+        sucursal: {
+          nombre: "sur"
+        },
+        cliente: {
+          correo: ""
+        },
+        arroz: {
+          precio: 100,
+          tipos: [
+            "Blanco",
+            "Integral",
+            "Fideos"
+          ]
+        },
+        grano: {
+          precio: 150,
+          tipos: [
+            "Lentejas",
+            "Frijol Negro"
+          ]
+        },
+        carnes: {
+          precio: 200,
+          tipos: [
+            "Costillitas BBQ",
+            "Molida",
+            "Pollo Parrilla"
+          ]
+        },
+        adiciones: {
+          precio: 180,
+          tipos: [
+            "Verduras",
+            "Nachos"
+          ]
+        },
+        salsas: {
+          precio: 100,
+          tipos: [
+            "Queso parmesano",
+            "Tomates asados",
+            "Salsa de la casa",
+            "Salsa misteriosa"
+          ]
+        },
+        extras: {
+          precio: 150,
+          tipos: [
+            "Huevo",
+            "Pimenton picado",
+            "Huevo de codorniz"
+          ]
+        },
+        bebidas: {
+          precio: 170,
+          tipos: [
+            "Te",
+            "Gaseosa"
+          ]
+        }
+      }
     };
     this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
     this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
@@ -40,10 +102,7 @@ class HacerPedido extends Component {
       })
       .catch((err) => console.log(err));
   }
-  agregarOrden (ingrediente) {
-    let orden = this.state.orden;
-    this.setState({ orden: orden });
-  }
+
   //login
   manejoContrasenia (e) {
     this.setState({ pass: e.target.value });
@@ -79,6 +138,12 @@ class HacerPedido extends Component {
     this.setState({ rSelected });
   }
 
+  agregarOrden (i) {
+    let orden = this.state.orden;
+    //    if(orden)
+    this.setState({ orden: orden });
+  }
+
   onCheckboxBtnClick (selected, p) {
     const index = this.state.cSelected.indexOf(selected);
     if (index < 0) {
@@ -98,7 +163,7 @@ class HacerPedido extends Component {
               <Row >
                 <Card>
                   <CardBody>
-                    <CardTitle>Eligue  {p.tipo}</CardTitle>
+                    <CardTitle>Elige  {p.tipo}</CardTitle>
                     <CardSubtitle>1 gratis (cada adicional {p.precio})</CardSubtitle>
                     {p.tipos.map((i, p) => {
                       return (
